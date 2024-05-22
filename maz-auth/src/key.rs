@@ -26,6 +26,12 @@ impl Key {
     pub fn generate_now(&self) -> Result<String, std::time::SystemTimeError> {
         self.totp.generate_current()
     }
+    pub(crate) fn populate_capnp_builder(&self, builder: &mut crate::locker_capnp::key::Builder) {
+        builder.set_id(&self.id);
+        builder.set_issuer(self.totp.issuer.as_deref().unwrap_or_default());
+        builder.set_secret(&self.totp.secret);
+        builder.set_account_name(&self.totp.account_name);
+    }
 }
 
 impl<'a> TryFrom<super::locker_capnp::key::Reader<'a>> for Key {
