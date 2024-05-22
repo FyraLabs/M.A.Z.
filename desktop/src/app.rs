@@ -89,7 +89,7 @@ impl SimpleComponent for AppModel {
             .forward(sender.input_sender(), |output| todo!());
 
         // TODO: populate authfactory
-        
+
         let model = AppModel { authfactory };
         let authbox = model.authfactory.widget();
         let widgets = view_output!();

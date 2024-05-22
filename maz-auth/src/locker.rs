@@ -12,14 +12,14 @@ impl Locker {
     ///
     /// # Errors
     /// - fail to parse file
-    pub fn from_file(f: &mut File, pw: &[u8]) -> Result<Locker, AuthErr> {
+    pub fn from_file(f: &mut impl std::io::Read, pw: &[u8]) -> Result<Locker, AuthErr> {
         let data = cocoon::Cocoon::new(pw).parse(f)?;
         let rd = capnp::serialize_packed::read_message(&*data, cm::ReaderOptions::new())?;
         Ok(Locker::try_from(rd.get_root::<lc::locker::Reader>()?)?)
     }
 
     /// Encrypt and write to locker db file.
-    pub fn write(&self, f: &mut impl Write, pw: &[u8]) -> Result<(), AuthErr> {
+    pub fn write(&self, f: &mut impl std::io::Write, pw: &[u8]) -> Result<(), AuthErr> {
         let mut msg = capnp::message::Builder::new_default();
         {
             let mut locker = msg.init_root::<lc::locker::Builder>();
@@ -30,7 +30,8 @@ impl Locker {
             }
         }
 
-        let mut writer = std::io::BufWriter::new(&mut vec![]);
+        let mut buf = vec![];
+        let mut writer = std::io::BufWriter::new(&mut buf);
         capnp::serialize_packed::write_message(&mut writer, &msg)?;
         let buf = std::mem::take(writer.into_inner().unwrap());
         cocoon::Cocoon::new(pw).dump(buf, f)?;
