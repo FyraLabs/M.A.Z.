@@ -1,4 +1,5 @@
 mod app;
+mod local;
 
 use tracing_subscriber::EnvFilter;
 

@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 capnp = "0.19.5"
 cocoon = "0.4.1"
+thiserror = "1.0.61"
 totp-rs = { version = "5.5.1", features = ["otpauth"] }
 
 [build-dependencies]
