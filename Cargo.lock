@@ -1485,6 +1485,7 @@ dependencies = [
  "libhelium",
  "maz-auth",
  "relm4",
+ "thiserror",
  "tracing",
  "tracing-subscriber",
 ]
