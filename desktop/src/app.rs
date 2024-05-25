@@ -41,6 +41,7 @@ pub(crate) struct AppModel {
 #[derive(Debug)]
 pub(crate) enum AppInput {
     SelectionChanged,
+    LocalEvent(crate::local::Event),
 }
 
 #[relm4::component(pub(crate))]
