@@ -46,8 +46,8 @@ pub enum Event {
 }
 
 pub fn read_password(name: &str) -> Option<String> {
-    keyring::Entry::new(crate::APPID, name)?.get_password().ok()
-
+    let entry = keyring::Entry::new(crate::APPID, name).ok()?;
+    entry.get_password().ok()
 }
 
 pub fn read_offline_default_locker(password: &str) -> Result<maz_auth::Locker, Event> {
