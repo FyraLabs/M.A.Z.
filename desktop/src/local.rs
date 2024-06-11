@@ -63,6 +63,11 @@ pub fn read_password(name: &str) -> Option<String> {
     entry.get_password().ok()
 }
 
+pub fn write_password(name: &str, password: &str) -> Result<(), keyring::Error> {
+    let entry = keyring::Entry::new(crate::APPID, name)?;
+    entry.set_password(password)
+}
+
 pub fn read_offline_locker(name: &str, password: &str) -> Result<maz_auth::Locker, Event> {
     let path = DATADIR.join(format!("{name}.mazl"));
     let f = std::fs::File::open(&path);
@@ -77,4 +82,13 @@ pub fn read_offline_locker(name: &str, password: &str) -> Result<maz_auth::Locke
         maz_auth::AuthErr::Io(e) => Event::IoFailure(e),
         e => Event::DecryptFailure(e),
     })
+}
+
+pub fn write_offline_locker(locker: &maz_auth::Locker, password: &str) -> Result<(), Event> {
+    let name = &locker.name;
+    let path = DATADIR.join(format!("{name}.mazl"));
+    let mut f = std::fs::File::open(path)?;
+    locker
+        .write(&mut f, password.as_bytes())
+        .map_err(Event::DecryptFailure)
 }
