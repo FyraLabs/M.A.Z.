@@ -8,6 +8,12 @@ struct AuthButton {
     // TODO: stuff
 }
 
+impl From<maz_auth::Key> for AuthButton {
+    fn from(value: maz_auth::Key) -> Self {
+        Self {}
+    }
+}
+
 #[relm4::factory]
 impl FactoryComponent for AuthButton {
     type Init = ();
@@ -90,6 +96,20 @@ impl SimpleComponent for AppModel {
             .forward(sender.input_sender(), |output| todo!());
 
         // TODO: populate authfactory
+
+        let lockers = crate::local::list_lockers().expect("Can't list lockers");
+        let locker = match &*lockers {
+            [] => todo!("no impl new locker UI"),
+            [name] => crate::local::read_offline_locker(name, crate::local::read_password(name))
+                .expect("Can't read offline locker"),
+            _ => todo!("locker chooser…?"),
+        };
+
+        let auths = authfactory.guard();
+        locker
+            .keys
+            .iter()
+            .for_each(|key| auths.push_back(key.into()));
 
         let model = AppModel { authfactory };
         let authbox = model.authfactory.widget();
