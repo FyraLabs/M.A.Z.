@@ -6,10 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-capnp = "0.19.5"
-cocoon = "0.4.1"
-thiserror = "1.0.61"
-totp-rs = { version = "5.5.1", features = ["otpauth"] }
+capnp = "0.19.6"
+cocoon = "0.4.2"
+thiserror = "1.0.63"
+totp-rs = { version = "5.6.0", features = ["otpauth"] }
 
 [build-dependencies]
 capnpc = "0.19.0"

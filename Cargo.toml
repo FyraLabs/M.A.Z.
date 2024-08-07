@@ -1,7 +1,4 @@
 [workspace]
 resolver = "2"
 
-members = [
-    "desktop",
-    "auth",
-]
+members = ["desktop", "auth"]
